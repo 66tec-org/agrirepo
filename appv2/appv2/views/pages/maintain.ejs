@@ -40,6 +40,7 @@
       <!-- Counts Section -->
       <%- include('../templates/topnotices.ejs') %>
       <!-- Header Section-->
+      <center>
       <div class="panel-body">
         <div class="row">
             <div class="col-lg-10">
@@ -66,7 +67,7 @@
                                 <td> <%= item.farm_location%></td>
                                 <td> <%= item.farm_status%></td>
                                 <td> <%= item.farm_create_date%></td>
-                                <td><a href="delete?deleteId=<%= item.farm_id%>"> <i class="fa fa-trash" aria-hidden="true"></i> </a> </td>
+                                <td style="text-align: right;"><a href="delete?deleteId=<%= item.farm_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
                             </tr>
                             <% }); %>
                            
@@ -94,6 +95,7 @@
                                 <th>Zone Name</th>
                                 <th>Farm Name</th>
                                 
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -102,6 +104,7 @@
                                 <td> <%= item.zone_id%></td>
                                 <td> <%= item.zone_name%></td>
                                 <td> <%= item.farm_name%></td>
+                                <td style="text-align: right;"><a href="deletezone?deleteId=<%= item.zone_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
                             </tr>
                             <% }); %>
                            
@@ -138,6 +141,7 @@
                                 <td> <%= item.chamber_name%></td>
                                 <td> <%= item.zone_name%></td>
                                 <td> <%= item.farm_name%></td>
+                                <td style="text-align: right;"><a href="deletechamber?deleteId=<%= item.chamber_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
                             </tr>
                             <% }); %>
                            
