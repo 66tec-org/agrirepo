@@ -66,7 +66,16 @@
               <h2> New chamber</h2>
               <form role="form" method="POST" action="createchamber" >
               <div class="form-group">
+                 
+                <label for="">farm Name</label>
+                  <select class="form-control" name="farm_name" id="">
+                    <% stream.forEach(function(item) { %>
+                    <option><%= item.farm_name%></option>
+                    <% }); %>
+
+                  </select>
                   
+
                 <label for="">Chamber Name</label>
                 <input type="text" required
                   class="form-control" name="chamber_name" id="chamber_name" aria-describedby="helpId" placeholder="">
@@ -77,29 +86,18 @@
                   class="form-control" name="chamber_disp_name" id="chamber_disp_name" aria-describedby="helpId" placeholder="">
                 <small id="helpId" class="form-text text-muted"></small>
 
-                <div class="form-group">
-                  <label for="">Zone Name</label>
-                  <select class="form-control" name="zone_name" id="">
-                    <% stream2.forEach(function(item) { %>
-                    <option><%= item.zone_name%></option>
-                    <% }); %>
-
-                  </select>
+                <label for="">Chamber type</label>
+                <input type="text" required
+                  class="form-control" name="chamber_type" id="chamber_type" aria-describedby="helpId" placeholder="">
+                <small id="helpId" class="form-text text-muted"></small>
 
                   
                 <div class="form-group">
-                  <label for="">farm Name</label>
-                  <select class="form-control" name="farm_name" id="">
-                    <% stream.forEach(function(item) { %>
-                    <option><%= item.farm_name%></option>
-                    <% }); %>
-
-                  </select>
-
-
+                  
                 <br>
-                <button href="createchamber" class="btn btn-primary" role="button">Create</button>                
               </div>
+                <button href="createchamber" class="btn btn-primary" role="button">Create</button>                
+              
             </form>
             
 

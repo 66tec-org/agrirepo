@@ -20,6 +20,8 @@ con.connect(function(err) {
 console.log("Connected!");
 });  
 
+
+
 app.use(session({
 	secret: 'secret',
 	resave: true,
@@ -39,7 +41,7 @@ app.use(bodyParser.json());
 ///////////////////////////////////
 
 app.get('/',function (req, res) {
-  res.render('pages/login')
+  res.render('pages/index')
 });
 
 app.get('/home',function (req, res) {
@@ -49,7 +51,10 @@ app.get('/home',function (req, res) {
 app.get('/newfarm',function (req, res) {
   if (req.session.loggedin) {
   var username_dash = req.session.username;
-  res.render('pages/newfarm',{username_dash:username_dash });
+  con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+    var usertype = rsi[0].role;
+  res.render('pages/newfarm',{username_dash:username_dash,usertype:usertype });
+  });
   } else {
   res.send('Please login to view this page!');
   }
@@ -78,7 +83,10 @@ app.get('/logout',function (req, res) {
 app.get('/dashboarduser',function (req, res) {
   if (req.session.loggedin) {
   var username_dash = req.session.username;
-  res.render('pages/dashboarduser',{username_dash:username_dash });
+  con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+    var usertype = rsi[0].role;
+  res.render('pages/dashboarduser',{username_dash:username_dash,usertype:usertype });
+  });
 } else {
   res.send('Please login to view this page!');
 }
@@ -93,10 +101,12 @@ app.get('/allchambers',function (req, res, next){
   if (req.session.loggedin) {
        var username_dash = req.session.username;
       con.query('SELECT * from stream_chamber ORDER BY stream_id DESC LIMIT 10', function (err, rs) {
-          res.render('pages/allchambers', {username_dash:username_dash,stream: rs });
-      });
+        con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+          var usertype = rsi[0].role;
+          res.render('pages/allchambers', {username_dash:username_dash,stream: rs,usertype:usertype });
+      });});
   } else {
-      res.send('Please login to view this page!');
+      res.render('errors/notloggedinerror');
   }
 });
 
@@ -114,31 +124,30 @@ app.get('/currentchambers',function (req, res, next){
 });
 
 
-app.get('/buychamber',function (req, res, next){
-  if (req.session.loggedin) {
-      // res.send('Welcome back, ' + req.session.username + '!');
-       var username_dash = req.session.username;
-      //con.query('SELECT * from stream_chamber ORDER BY stream_id DESC LIMIT 10', function (err, rs) {
-          res.render('pages/buychamber', {username_dash:username_dash});
-      //});
-  } else {
-      res.send('Please login to view this page!');
-  }
-  // res.end();
-});
+// app.get('/buychamber',function (req, res, next){
+//   if (req.session.loggedin) {
+//       // res.send('Welcome back, ' + req.session.username + '!');
+//        var username_dash = req.session.username;
+//       //con.query('SELECT * from stream_chamber ORDER BY stream_id DESC LIMIT 10', function (err, rs) {
+//           res.render('pages/buychamber', {username_dash:username_dash});
+//       //});
+//   } else {
+//       res.send('Please login to view this page!');
+//   }  
+// });
 
-app.get('/croptimeline',function (req, res, next){
-  if (req.session.loggedin) {
-      // res.send('Welcome back, ' + req.session.username + '!');
-       var username_dash = req.session.username;
-      //con.query('SELECT * from stream_chamber ORDER BY stream_id DESC LIMIT 10', function (err, rs) {
-          res.render('pages/croptimeline', {username_dash:username_dash });
-      //});
-  } else {
-      res.send('Please login to view this page!');
-  }
+// app.get('/croptimeline',function (req, res, next){
+//   if (req.session.loggedin) {
+//       // res.send('Welcome back, ' + req.session.username + '!');
+//        var username_dash = req.session.username;
+//       //con.query('SELECT * from stream_chamber ORDER BY stream_id DESC LIMIT 10', function (err, rs) {
+//           res.render('pages/croptimeline', {username_dash:username_dash });
+//       //});
+//   } else {
+//       res.send('Please login to view this page!');
+//   }
   // res.end();
-});
+// });
 
 // app.get('/forms',function (req, res) {
 //   res.render('pages/forms')
@@ -147,9 +156,13 @@ app.get('/croptimeline',function (req, res, next){
 app.get('/newzone',function (req, res,next) {
   if (req.session.loggedin) {
     username_dash = req.session.username;
-   con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
-    res.render('pages/newzone', {username_dash:username_dash,stream: rs });
-});
+    con.query('SELECT chamber_name from chamber where user_name = ?',username_dash, function (err, rsi) {
+     con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
+        con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+          var usertype = rsi[0].role;
+    
+        res.render('pages/newzone', {username_dash:username_dash,stream: rs,stream2: rsi,usertype: usertype });
+    });  });});
   } else {
   res.send('Please login to view this page!');
   }
@@ -161,8 +174,11 @@ app.get('/newchamber',function (req, res,next) {
   con.query('SELECT zone_name from zone where user_name = ?',username_dash, function (err, rsi) {
     
     con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
-      res.render('pages/newchamber', {username_dash:username_dash,stream: rs,stream2: rsi });
-  });     });
+      con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+        var usertype = rsi[0].role;
+  
+      res.render('pages/newchamber', {username_dash:username_dash,stream: rs,stream2: rsi,usertype:usertype });
+  });     });});
   } else {
     res.send('Please login to view this page!');
       }
@@ -171,8 +187,17 @@ app.get('/newchamber',function (req, res,next) {
 app.get('/newcomponent',function (req, res) {
   if (req.session.loggedin) {
   var username_dash = req.session.username;
-    res.render('pages/newcomponent',{username_dash:username_dash });
-  } else {
+    
+  con.query('SELECT zone_name from zone where user_name = ?',username_dash, function (err, rsi) {
+    
+    con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
+      con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+        var usertype = rsi[0].role;
+  
+      res.render('pages/newcomponent', {username_dash:username_dash,stream: rs,stream2: rsi,usertype:usertype });
+    });      
+   });  }); 
+} else {
     res.send('Please login to view this page!');
       }
   });
@@ -186,8 +211,12 @@ app.get('/newcomponent',function (req, res) {
          con.query('SELECT * from zone where user_name = ?',username_dash, function (err, rsi) {
     
           con.query('SELECT * from farm where user_name = ?',username_dash, function (err, rs) {
-            res.render('pages/insights', {username_dash:username_dash,stream: rs,stream2: rsi ,stream3: rsj });
-        });      });      });
+
+            con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+              var usertype = rsi[0].role;
+        
+            res.render('pages/insights', {username_dash:username_dash,stream: rs,stream2: rsi ,stream3: rsj,usertype:usertype });
+        });  });           });      });
       } else {
         res.send('Please login to view this page!');
             }
@@ -202,8 +231,10 @@ app.get('/newcomponent',function (req, res) {
          con.query('SELECT * from zone where user_name = ?',username_dash, function (err, rsi) {
     
           con.query('SELECT * from farm where user_name = ?',username_dash, function (err, rs) {
-            res.render('pages/maintain', {username_dash:username_dash,stream: rs,stream2: rsi ,stream3: rsj });
-        });   });   });
+            con.query('SELECT role from user_login where username = ?',username_dash, function (error, rss) {
+              var usertype = rss[0].role;
+            res.render('pages/maintain', {username_dash:username_dash,stream: rs,stream2: rsi ,stream3: rsj,usertype:usertype});
+        });});   });   });
     } else {
         res.send('Please login to view this page!');
     }
@@ -222,7 +253,31 @@ app.get('/newcomponent',function (req, res) {
     }
 });
   
+app.get('/deletechamber', function(req, res) {
+  if (req.session.loggedin) {
+ var username_dash = req.session.username;
+  let deleteId =  req.query.deleteId;
+  console.log(deleteId);
+ con.query('Delete from chamber where chamber_id = ?',deleteId, function (err, rs) {
+     res.redirect('/maintain');
+ });
+} else {
+ res.send('Please login to view this page!');
+}
+});
 
+app.get('/deletezone', function(req, res) {
+  if (req.session.loggedin) {
+ var username_dash = req.session.username;
+  let deleteId =  req.query.deleteId;
+  console.log(deleteId);
+ con.query('Delete from zone where zone_id = ?',deleteId, function (err, rs) {
+     res.redirect('/maintain');
+ });
+} else {
+ res.send('Please login to view this page!');
+}
+});
 /////////////////////////////////////////////////////////////////////////////////////////////
 var credentials = { 
   host: "localhost",
@@ -233,9 +288,10 @@ var credentials = {
 //////////////////////////////
 app.post('/loginauth',function (req, res) {
 
-   var username = req.body.username;
+  var username = req.body.username;
  	var password = req.body.password;
-   var username_dash = username;
+  var username_dash = username;
+   
   var pool = mysql.createPool(credentials);
   var query1 = "SELECT * FROM user_login WHERE username = ? AND password = ?";
   var query2 = "SELECT * from stream_chamber ORDER BY stream_id DESC LIMIT 5";
@@ -269,12 +325,11 @@ app.post('/loginauth',function (req, res) {
                      if (results.length > 0) {
                       req.session.loggedin = true;
                               req.session.username = username;
-                             // var username_dash = username;
                               var date = new Date().toLocaleString();
                               connection.query('UPDATE user_login set lastlogin = ? where username = ?',[date,username]);
-                     }
+                              } 
                      else{
-                       res.send('invalid name or pASS')
+                      res.send('invalid name or password')
                      }
       // When done with the connection, release it.
       // Handle error after the release.
@@ -285,7 +340,13 @@ app.post('/loginauth',function (req, res) {
     if (err) throw err; // not connected!
     console.log('connected');
     connection.query(query2, function (error, rs) {
-      res.render('pages/dashboarduser',{username_dash:username_dash,stream: rs,rdate :rdate });
+      connection.query('SELECT role from user_login where username = ?',[username], function (error, rsi) {
+        var usertype = rsi[0].role;
+       
+        res.render('pages/dashboarduser',{username_dash:username_dash,stream: rs,rdate :rdate,usertype:usertype });
+        
+      });
+      
        
       connection.release();
     });
@@ -293,12 +354,12 @@ app.post('/loginauth',function (req, res) {
     });
   } 
     else{
-      res.send('insertueser name and password')
+      res.send('invalid name or password')
     }
   });
  
 app.post('/insertuser' , function(req,res,next){
-
+  
       let fname = req.body.fname;
       let lname = req.body.lname;
       let username = req.body.username;
@@ -317,14 +378,14 @@ app.post('/insertuser' , function(req,res,next){
   });     });
 
 app.post('/createfarm' , function(req,res,next){
-  let farm_name = req.body.farm_name;
+  let farm_name     = req.body.farm_name;
   let farm_size_len = req.body.farm_size_len;
   let farm_size_wid = req.body.farm_size_wid;
   let farm_location = req.body.farm_location;
   var now = new Date().getTime();
   let farm_create_date = now;
   var username_dash = req.session.username;
-  
+  var usertype_dash = req.session.userId;
   var form_data = {
       farm_name: farm_name,
       farm_size_len:farm_size_len,
@@ -336,30 +397,36 @@ app.post('/createfarm' , function(req,res,next){
     if (err) throw err;
 
     con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
-      res.render('pages/newzone', {username_dash:username_dash,stream: rs });
-  });
-  });
+      con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+        var usertype = rsi[0].role;
+  res.render('pages/newchamber', {username_dash:username_dash,stream: rs,usertype:usertype });
+  });  });});
 });
 
 app.post('/createchamber' , function(req,res,next){
-  let chamber_name = req.body.chamber_name;
+  let chamber_name      = req.body.chamber_name;
   let chamber_disp_name = req.body.chamber_disp_name;
-  let zone_name = req.body.zone_name;
-  let farm_name = req.body.farm_name;
-  var username_dash = req.session.username;
+  let farm_name         = req.body.farm_name;
+  var username_dash     = req.session.username;
+  var usertype          = req.session.usertype;
   
   var form_data = {
       chamber_name: chamber_name,
       chamber_disp_name:chamber_disp_name,
-      zone_name : zone_name,
       farm_name : farm_name,
       user_name:username_dash
     }
   con.query('INSERT INTO chamber SET ?', form_data, function (err, result) {
     if (err) throw err;
-    res.render('pages/newcomponent',{username_dash:username_dash});
-});
-});
+      con.query('SELECT chamber_name from chamber where user_name = ?',username_dash, function (err, rsi) {
+      
+        con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
+          con.query('SELECT role from user_login where username = ?',username_dash, function (error, rss) {
+            var usertype = rsi[0].role;
+          res.render('pages/newzone', {username_dash:username_dash,stream: rs,stream2: rsi,usertype:usertype });
+      });  });  });
+ 
+});});
 
 app.post('/createcomponent' , function(req,res,next){
   let component_name = req.body.component_name;
@@ -376,18 +443,23 @@ app.post('/createcomponent' , function(req,res,next){
     }
   con.query('INSERT INTO component SET ?', form_data, function (err, result) {
     if (err) throw err;
-    res.render('pages/dashboarduser',{username_dash:username_dash});
-});
+    con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+      var usertype = rsi[0].role;
+
+    res.render('pages/dashboarduser',{username_dash:username_dash,usertype:usertype});
+});   });
 });
 
 
-app.post('/tochamber' , function(req,res,next){
+app.post('/tocomponent' , function(req,res,next){
   let zone_name = req.body.zone_name;
+  let chamber_name = req.body.chamber_name;
   let farm_name = req.body.farm_name;
   var username_dash = req.session.username;
   
   var form_data = {
       zone_name: zone_name,
+      chamber_name:chamber_name,
       farm_name:farm_name,
       user_name:username_dash
       }
@@ -396,8 +468,12 @@ app.post('/tochamber' , function(req,res,next){
     con.query('SELECT zone_name from zone where user_name = ?',username_dash, function (err, rsi) {
     
       con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
-        res.render('pages/newchamber', {username_dash:username_dash,stream: rs,stream2: rsi });
+        con.query('SELECT role from user_login where username = ?',username_dash, function (error, rss) {
+          var usertype = rss[0].role;
+    
+        res.render('pages/newcomponent', {username_dash:username_dash,stream: rs,stream2: rsi,usertype:usertype });
     });  });  });
+});
 });
 
 app.use(logger('dev'));

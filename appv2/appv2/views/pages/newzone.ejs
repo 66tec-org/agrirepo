@@ -58,31 +58,38 @@
           </div>
           <div class="col-lg-6">
               <h2> New zone</h2>
-              <form role="form" method="POST" action="tochamber" >
+              <form role="form" method="POST" action="tocomponent" >
               <div class="form-group">
-                  
+                <label for="">Farm Name</label>
+                <select class="form-control" name="farm_name" id="">
+                  <% stream.forEach(function(item) { %>
+                  <option><%= item.farm_name%></option>
+                  <% }); %>
+
+                </select>
+
+                <label for="">Chamber Name</label>
+                <select class="form-control" name="chamber_name" id="">
+                  <% stream2.forEach(function(item) { %>
+                  <option><%= item.chamber_name%></option>
+                  <% }); %>
+
+                </select>
+                
+
+
                 <label for="">Zone Name</label>
                 <input type="text" required
                   class="form-control" name="zone_name" id="zone_name" aria-describedby="helpId" placeholder="">
-                <small id="helpId" class="form-text text-muted">insert your farm name here</small>
+                <small id="helpId" class="form-text text-muted">insert your zone name here</small>
 
                 <br>
                                
                   
                   <div class="form-group">
-                    <label for="">Farm Name</label>
-                    <select class="form-control" name="farm_name" id="">
-                      <% stream.forEach(function(item) { %>
-                      <option><%= item.farm_name%></option>
-                      <% }); %>
-
-                    </select>
-                    
-                    
-                      
-
+                   
                   <br>
-                  <button href="tochamber" class="btn btn-primary" role="button">Create & Proceed</button>                
+                  <button href="tocomponent" class="btn btn-primary" role="button">Create & Proceed</button>                
                               
                 </div> 
                 

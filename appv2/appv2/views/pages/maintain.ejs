@@ -81,30 +81,32 @@
         </div>
         <!-- /.row -->
     </div>
-
-
-
-    <div class="panel-body">
+ <div class="panel-body">
         <div class="row">
             <div class="col-lg-10">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover table-striped">
-                        <thead>  <h1>Your Zones</h1>
+                        <thead>  <h1>Your Chambers</h1>
                             <tr>
-                                <th>Zone ID</th>
+                                <th>Chamber ID</th>
+                                <th>Chamber Name</th>
+                                <th>Chamber Displau Name</th>
+                                <th>Chamber Type</th>
+                                
                                 <th>Zone Name</th>
                                 <th>Farm Name</th>
-                                
                                 
                             </tr>
                         </thead>
                         <tbody>
-                            <% stream2.forEach(function(item) { %>
+                            <% stream3.forEach(function(item) { %>
                             <tr>
-                                <td> <%= item.zone_id%></td>
-                                <td> <%= item.zone_name%></td>
+                                <td> <%= item.chamber_id%></td>
+                                <td> <%= item.chamber_name%></td>
+                                <td> <%= item.chamber_disp_name%></td>
+                                <td> <%= item.chamber_type%></td>
                                 <td> <%= item.farm_name%></td>
-                                <td style="text-align: right;"><a href="deletezone?deleteId=<%= item.zone_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
+                                <td style="text-align: right;"><a href="deletechamber?deleteId=<%= item.chamber_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
                             </tr>
                             <% }); %>
                            
@@ -119,29 +121,29 @@
         <!-- /.row -->
     </div>
 
-
     <div class="panel-body">
         <div class="row">
             <div class="col-lg-10">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover table-striped">
-                        <thead>  <h1>Your Chambers</h1>
+                        <thead>  <h1>Your Zones</h1>
                             <tr>
-                                <th>Chamber ID</th>
-                                <th>Chamber Name</th>
+                                <th>Zone ID</th>
                                 <th>Zone Name</th>
+                                <th>Chamber Name</th>
                                 <th>Farm Name</th>
+                                
                                 
                             </tr>
                         </thead>
                         <tbody>
-                            <% stream3.forEach(function(item) { %>
+                            <% stream2.forEach(function(item) { %>
                             <tr>
-                                <td> <%= item.chamber_id%></td>
-                                <td> <%= item.chamber_name%></td>
+                                <td> <%= item.zone_id%></td>
                                 <td> <%= item.zone_name%></td>
+                                <td> <%= item.chamber_name%></td>
                                 <td> <%= item.farm_name%></td>
-                                <td style="text-align: right;"><a href="deletechamber?deleteId=<%= item.chamber_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
+                                <td style="text-align: right;"><a href="deletezone?deleteId=<%= item.zone_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
                             </tr>
                             <% }); %>
                            
