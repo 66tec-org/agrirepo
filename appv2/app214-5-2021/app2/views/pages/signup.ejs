@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   		
+		
+		<link rel="stylesheet" href="style.css">
+		
+		
+	<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+		<!---- Font awesom link local ----->
+	</head>
+	<body>
+        
+        <center>
+	<div class="container-fluid">
+        
+		<div class="container">
+			
+			<div class="row">
+                <div class="col-md-2">
+					<!-------null------>
+				</div>
+				
+				<div class="col-md-8">
+ 					<form id="title" role="form" method="post" action="insertuser">
+						<fieldset>							
+							<p  class="text-uppercase pull-center" style="font-size: 36px;"> SIGN UP</p>	
+
+                            <div class="row">
+								<div class="form-group col-md-6">
+								<input type="text" name="fname" id="fname" class="form-control input-lg" placeholder="First name" required onkeyup='genuser();'>
+							</div>
+							<div class="form-group col-md-6">
+								<input type="text" name="lname" id="lname" class="form-control input-lg" placeholder="Last name" required onkeyup='genuser();'>
+							</div>
+							</div>
+ 							<div class="form-group">
+								<input type="text" name="username" id="username" class="form-control input-lg" placeholder="Username" readonly >
+							</div>
+
+							<div class="form-group">
+								<input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address" required>
+							</div>
+                            <div class="form-group">
+								<input type="text" name="phone" id="phone" class="form-control input-lg" placeholder="Phone Number">
+							</div>
+							<div class="form-group">
+								<input type="password" name="password" id="password" class="form-control input-lg" onkeyup='check();' placeholder="Password" required>
+							</div>
+								<div class="form-group">
+								<input type="password" name="confirm_password" id="confirm_password" class="form-control input-lg" onkeyup='check();' placeholder="Repeat Password" required>
+								<span id='message' style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;"></span>
+							</div>
+															 
+								  By Clicking register you agree to our</label> <a href=""> Terms and Conditions <br><br>
+                                    </a><a href="login" style="text-align: right;">already a member? click here</a><br><br>
+								
+                                    <button name="" id="" class="btn btn-primary" href="insertuser" role="button">Register</button>
+ 							<!-- <div class="b4-t">
+ 									  <button><a href="insertuser">Register</a></button>
+ 							</div> -->
+						</fieldset>
+					</form>
+				</div>
+				
+				<div class="col-md-2">
+					<!-------null------>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</center>
+       <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script>
+		var check = function() {
+			if (document.getElementById('password').value ==
+			  document.getElementById('confirm_password').value) {
+			  document.getElementById('message').style.color = 'green';
+			  document.getElementById('message').innerHTML = 'Success';
+			} else {
+			  document.getElementById('message').style.color = 'red';
+			  document.getElementById('message').innerHTML = 'Passwords Do not match';
+			}
+		  }
+		  var genuser = function() {
+			var fname = document.getElementById('fname').value;
+			var lname = document.getElementById('lname').value;
+			var rand = Math.floor(Math.random() * 100);
+			var username = fname+"_"+lname+rand;
+			document.getElementById("username").value = username;
+			//console.log(username);
+		  }
+	</script>
+	</body>
+	 
+
+</html>

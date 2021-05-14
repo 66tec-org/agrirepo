@@ -124,6 +124,41 @@ app.get('/currentchambers',function (req, res, next){
 });
 
 
+app.get('/activitylog',function (req, res, next){
+  if (req.session.loggedin) {
+      // res.send('Welcome back, ' + req.session.username + '!');
+       var username_dash = req.session.username;
+      con.query('SELECT * from activitylog where user_name = ? ORDER BY activity_id  DESC LIMIT 20',username_dash, function (err, rs) {
+       
+        con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+          var usertype = rsi[0].role;
+    
+        res.render('pages/activitylog', {username_dash:username_dash,usertype: usertype,stream: rs });
+    });  });
+  } else {
+      res.send('Please login to view this page!');
+  }
+});
+
+app.get('/tickets',function (req, res, next){
+  if (req.session.loggedin) {
+      // res.send('Welcome back, ' + req.session.username + '!');
+       var username_dash = req.session.username;
+      con.query('SELECT * from tickets where user_name = ? ORDER BY ticket_id  DESC LIMIT 20',username_dash, function (err, rs) {
+       
+        con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+          var usertype = rsi[0].role;
+    
+        res.render('pages/tickets', {username_dash:username_dash,usertype: usertype,stream: rs });
+    });  });
+  } else {
+      res.send('Please login to view this page!');
+  }
+});
+
+
+
+
 // app.get('/buychamber',function (req, res, next){
 //   if (req.session.loggedin) {
 //       // res.send('Welcome back, ' + req.session.username + '!');
@@ -156,12 +191,12 @@ app.get('/currentchambers',function (req, res, next){
 app.get('/newzone',function (req, res,next) {
   if (req.session.loggedin) {
     username_dash = req.session.username;
-    con.query('SELECT chamber_name from chamber where user_name = ?',username_dash, function (err, rsi) {
+    con.query('SELECT chamber_name from chamber where user_name = ?',username_dash, function (err, rss) {
      con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
         con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
           var usertype = rsi[0].role;
     
-        res.render('pages/newzone', {username_dash:username_dash,stream: rs,stream2: rsi,usertype: usertype });
+        res.render('pages/newzone', {username_dash:username_dash,stream: rs,stream2: rss,usertype: usertype });
     });  });});
   } else {
   res.send('Please login to view this page!');
@@ -188,13 +223,13 @@ app.get('/newcomponent',function (req, res) {
   if (req.session.loggedin) {
   var username_dash = req.session.username;
     
-  con.query('SELECT zone_name from zone where user_name = ?',username_dash, function (err, rsi) {
+  con.query('SELECT zone_name from zone where user_name = ?',username_dash, function (err, rss) {
     
     con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
       con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
         var usertype = rsi[0].role;
   
-      res.render('pages/newcomponent', {username_dash:username_dash,stream: rs,stream2: rsi,usertype:usertype });
+      res.render('pages/newcomponent', {username_dash:username_dash,stream: rs,stream2: rss,usertype:usertype });
     });      
    });  }); 
 } else {
@@ -208,14 +243,14 @@ app.get('/newcomponent',function (req, res) {
          var username_dash = req.session.username;
          con.query('SELECT * from chamber where user_name = ?',username_dash, function (err, rsj) {
     
-         con.query('SELECT * from zone where user_name = ?',username_dash, function (err, rsi) {
+         con.query('SELECT * from zone where user_name = ?',username_dash, function (err, rss) {
     
           con.query('SELECT * from farm where user_name = ?',username_dash, function (err, rs) {
 
             con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
               var usertype = rsi[0].role;
         
-            res.render('pages/insights', {username_dash:username_dash,stream: rs,stream2: rsi ,stream3: rsj,usertype:usertype });
+            res.render('pages/insights', {username_dash:username_dash,stream: rs,stream2: rss ,stream3: rsj,usertype:usertype });
         });  });           });      });
       } else {
         res.send('Please login to view this page!');

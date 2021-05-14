@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Maintainence - Intellefarms</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css">
+    <!-- Google fonts - Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <!-- jQuery Circle-->
+    <link rel="stylesheet" href="css/grasp_mobile_progress_circle-1.0.0.min.css">
+    <!-- Custom Scrollbar-->
+    <link rel="stylesheet" href="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+  </head>
+  <body>
+    <!-- Side Navbar -->
+    <%- include('../templates/leftnavbar.ejs') %>
+    <div class="page">
+      <!-- navbar-->
+      <header class="header">
+        <%- include('../templates/topbar.ejs') %>
+      </header>
+      <!-- Counts Section -->
+      <%- include('../templates/topnotices.ejs') %>
+      <!-- Header Section-->
+      <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>  <h1>Your Farms</h1>
+                            <tr>
+                                <th>Farm ID</th>
+                                <th>Farm Name</th>
+                                <th>Farm Length</th>
+                                <th>Farm Width</th>
+                                <th>farm Location</th>
+                                <th>Farm Status</th>
+                                <th>Created On</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% stream.forEach(function(item) { %>
+                            <tr>
+                                <td> <%= item.farm_id%></td>
+                                <td> <%= item.farm_name%></td>
+                                <td> <%= item.farm_size_len%></td>
+                                <td> <%= item.farm_size_wid%></td>
+                                <td> <%= item.farm_location%></td>
+                                <td> <%= item.farm_status%></td>
+                                <td> <%= item.farm_create_date%></td>
+                            </tr>
+                            <% }); %>
+                           
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+    </div>
+
+
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>  <h1>Your Zones</h1>
+                            <tr>
+                                <th>Zone ID</th>
+                                <th>Zone Name</th>
+                                <th>Farm Name</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% stream2.forEach(function(item) { %>
+                            <tr>
+                                <td> <%= item.zone_id%></td>
+                                <td> <%= item.zone_name%></td>
+                                <td> <%= item.farm_name%></td>
+                            </tr>
+                            <% }); %>
+                           
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+    </div>
+
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>  <h1>Your Chambers</h1>
+                            <tr>
+                                <th>Chamber ID</th>
+                                <th>Chamber Name</th>
+                                <th>Zone Name</th>
+                                <th>Farm Name</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% stream3.forEach(function(item) { %>
+                            <tr>
+                                <td> <%= item.chamber_id%></td>
+                                <td> <%= item.chamber_name%></td>
+                                <td> <%= item.zone_name%></td>
+                                <td> <%= item.farm_name%></td>
+                            </tr>
+                            <% }); %>
+                           
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+    </div>
+
+
+     
+      
+      <%- include('../templates/copyright.ejs') %>
+    </div>
+   
+    <!-- JavaScript files-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+    <script src="vendor/jquery.cookie/jquery.cookie.js"> </script>
+    
+    <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+    <script src="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+    
+    <!-- Main File-->
+    <script src="js/front.js"></script>
+  </body>
+</html>

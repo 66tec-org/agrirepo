@@ -66,16 +66,32 @@
               <h2> New Component</h2>
               <form role="form" method="POST" action="createcomponent" >
               <div class="form-group">
+
+                <label for="">Farm Name</label>
+                <select class="form-control" name="farm_name" id="">
+                  <% stream.forEach(function(item) { %>
+                  <option><%= item.farm_name%></option>
+                  <% }); %>
+
+                </select>
+
+                <label for="">Zone Name</label>
+                <select class="form-control" name="chamber_name" id="">
+                  <% stream2.forEach(function(item) { %>
+                  <option><%= item.zone_name%></option>
+                  <% }); %>
+
+                </select>
                   
                 <label for="">Component Name</label>
                 <input type="text"
                   class="form-control" required name="component_name" id="Component_name" aria-describedby="helpId" placeholder="">
-                <small id="helpId" class="form-text text-muted">insert your farm name here</small>
+                <small id="helpId" class="form-text text-muted">insert your component name here</small>
 
                 <label for="">Component Display Name</label>
                 <input type="text"
                   class="form-control" required name="component_disp_name" id="component_disp_name" aria-describedby="helpId" placeholder="">
-                <small id="helpId" class="form-text text-muted">make sure to enter the length in inches</small>
+                <small id="helpId" class="form-text text-muted"></small>
 
                 <label for="">Component Master Type</label>
                 <!-- <input type="text" class="form-control" name="component_master_type" id="component_master_type" aria-describedby="helpId" placeholder=""> -->
@@ -95,6 +111,7 @@
                       <option value="Leds">Leds</option>
                       <option value="Light Intensity">Light Intensity</option>
                       <option value="Humidity">Humidity</option>
+                      <option value="Temperature">Temperature</option>
 
                 </select>
                   <small id="helpId" class="form-text text-muted">Help text</small>
