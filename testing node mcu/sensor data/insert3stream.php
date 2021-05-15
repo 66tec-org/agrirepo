@@ -21,7 +21,7 @@ if (isset($_GET['component_name']) && isset($_GET['component_value']) && isset($
      $con = $db->connect();
  
     // Fire SQL query to insert data in weather
-    $result = mysqli_query($con,"INSERT INTO component_stream(component_name,component_value,zone_name,chamber_name,farm_name) 
+    $result = mysqli_query($con,"INSERT INTO component_stream (component_name,component_value,zone_name,chamber_name,farm_name) 
     VALUES('$component_name','$component_value','$zone_name','$chamber_name','$farm_name')");
  
     // Check for succesfull execution of query
