@@ -442,12 +442,14 @@ app.post('/createchamber' , function(req,res,next){
   let chamber_name      = req.body.chamber_name;
   let chamber_disp_name = req.body.chamber_disp_name;
   let farm_name         = req.body.farm_name;
+  let chamber_type      = req.body.chamber_type;
   var username_dash     = req.session.username;
   var usertype          = req.session.usertype;
   
   var form_data = {
       chamber_name: chamber_name,
       chamber_disp_name:chamber_disp_name,
+      chamber_type:chamber_type,
       farm_name : farm_name,
       user_name:username_dash
     }
@@ -457,7 +459,7 @@ app.post('/createchamber' , function(req,res,next){
       
         con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
           con.query('SELECT role from user_login where username = ?',username_dash, function (error, rss) {
-            var usertype = rsi[0].role;
+            var usertype = rss[0].role;
           res.render('pages/newzone', {username_dash:username_dash,stream: rs,stream2: rsi,usertype:usertype });
       });  });  });
  
