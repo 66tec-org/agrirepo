@@ -39,16 +39,15 @@
       </header>
       <!-- Counts Section -->
       <!-- Header Section-->
-<br><br>
-      <center>
+      <br><br>
       <div class="panel-body">
         <div class="row">
             <div class="col-lg-12">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover table-striped">
-                        <!-- <thead>  <h1>Your Farms</h1> -->
-                            <strong class="text-primary" style="font-size: 25px;"> YOUR FARM</strong></div>
-
+                        <thead>  <center>                            <strong class="text-primary" style="font-size: 25px;"> REGISTER FARMS</strong></div>
+                        </center>
+                        <br>
                             <tr>
                                 <th>Farm ID</th>
                                 <th>Farm Name</th>
@@ -62,53 +61,13 @@
                         <tbody>
                             <% stream.forEach(function(item) { %>
                             <tr>
-                                <td> <%= item.farm_id%> </td> 
+                                <td> <%= item.farm_id%></td>
                                 <td> <%= item.farm_name%></td>
                                 <td> <%= item.farm_size_len%></td>
                                 <td> <%= item.farm_size_wid%></td>
                                 <td> <%= item.farm_location%></td>
                                 <td> <%= item.farm_status%></td>
                                 <td> <%= item.farm_create_date%></td>
-                                <td style="text-align: right;"><a href="delete?deleteId=<%= item.farm_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
-                            </tr>
-                            <% }); %>
-                           
-
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-
-        </div>
-        <!-- /.row -->
-        <br><br>
-    </div>
- <div class="panel-body">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover table-striped">
-                        <!-- <thead>  <h1>Your Chambers</h1> -->
-                            <strong class="text-primary" style="font-size: 25px;"> YOUR CHAMBER</strong></div>
-                            <tr>
-                                <th>Chamber ID</th>
-                                <th>Chamber Name</th>
-                                <th>Chamber Display Name</th>
-                                <th>Chamber Type</th>
-                                <th>Farm Name</th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% stream3.forEach(function(item) { %>
-                            <tr>
-                                <td> <%= item.chamber_id%></td>
-                                <td> <%= item.chamber_name%></td>
-                                <td> <%= item.chamber_disp_name%></td>
-                                <td> <%= item.chamber_type%></td>
-                                <td> <%= item.farm_name%></td>
-                                <td style="text-align: right;"><a href="deletechamber?deleteId=<%= item.chamber_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
                             </tr>
                             <% }); %>
                            
@@ -123,20 +82,57 @@
         <!-- /.row -->
     </div>
 <br><br>
+
+        
     <div class="panel-body">
         <div class="row">
             <div class="col-lg-12">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover table-striped">
-                        <!-- <thead>  <h1>Your Zones</h1> -->
-                            <strong class="text-primary" style="font-size: 25px;"> YOUR ZONE</strong></div>
-
+                        <thead>  <center>                            <strong class="text-primary" style="font-size: 25px;"> REGISTER CHAMBERS</strong></div>
+                        </center>
+                        <br>
                             <tr>
-                                <th>Zone ID</th>
-                                <th>Zone Name</th>
+                                <th>Chamber ID</th>
                                 <th>Chamber Name</th>
                                 <th>Farm Name</th>
                                 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% stream3.forEach(function(item) { %>
+                            <tr>
+                                <td> <%= item.chamber_id%></td>
+                                <td> <%= item.chamber_name%></td>
+                                <td> <%= item.farm_name%></td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+    </div>
+
+
+<br><br>
+
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>  <center>                            <strong class="text-primary" style="font-size: 25px;"> REGISTER ZONES</strong></div>
+                        </center>
+                        <br>
+                            <tr>
+                                <th>Zone ID</th>
+                                <th>Zone Name</th>
+                                <th>Farm Name</th>
                                 
                             </tr>
                         </thead>
@@ -145,9 +141,7 @@
                             <tr>
                                 <td> <%= item.zone_id%></td>
                                 <td> <%= item.zone_name%></td>
-                                <td> <%= item.chamber_name%></td>
                                 <td> <%= item.farm_name%></td>
-                                <td style="text-align: right;"><a href="deletezone?deleteId=<%= item.zone_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
                             </tr>
                             <% }); %>
                            
@@ -163,7 +157,7 @@
     </div>
 
 
-     
+
       
       <%- include('../templates/copyright.ejs') %>
     </div>

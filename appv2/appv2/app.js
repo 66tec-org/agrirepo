@@ -11,9 +11,9 @@ const port = 7000;
 var mysql = require('mysql');
 var con = mysql.createConnection({
   host: "localhost",
-  user: "tecozk_root",
-  password: "dbase_fc",
-  database: "tecozk_agritech2"
+  user: "root",
+  password: "",
+  database: "tecozk_agritech"
 });
 con.connect(function(err) {
   if (err) throw err;
@@ -83,9 +83,24 @@ app.get('/logout',function (req, res) {
 app.get('/dashboarduser',function (req, res) {
   if (req.session.loggedin) {
   var username_dash = req.session.username;
+  con.query('Select * from farm', function(error,tf){
+    var tfarm=tf.length;
+  con.query('Select * from chamber', function(error,tc){
+    var tchamber=tc.length;
+  con.query('Select * from zone', function(error,tz){
+    var tzone=tz.length;
+  con.query('Select * from component', function(error,tcm){
+    var tcomponent=tcm.length;
+  con.query('Select * from user_login', function(error,tlog){
+    var tlogin=tlog.length;
   con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
     var usertype = rsi[0].role;
-  res.render('pages/dashboarduser',{username_dash:username_dash,usertype:usertype });
+  res.render('pages/dashboarduser',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin });
+  });
+  });
+  });
+  });
+  });
   });
 } else {
   res.send('Please login to view this page!');
@@ -118,6 +133,19 @@ app.get('/currentchambers',function (req, res, next){
           res.render('pages/currentchambers', {username_dash:username_dash,stream: rs });
       //  res.render('pages/users');
       });
+  } else {
+      res.send('Please login to view this page!');
+  }
+});
+
+app.get('/customertype',function (req, res, next){
+  if (req.session.loggedin) {
+      // res.send('Welcome back, ' + req.session.username + '!');
+       var username_dash = req.session.username;
+      //con.query('SELECT * from stream_chamber ORDER BY stream_id DESC LIMIT 10', function (err, rs) {
+          res.render('pages/customertype', {username_dash:username_dash});
+      //  res.render('pages/users');
+      //});
   } else {
       res.send('Please login to view this page!');
   }
@@ -258,6 +286,43 @@ app.get('/newcomponent',function (req, res) {
   });
   
 
+  app.get('/registerfarm',function (req, res, next){
+    if (req.session.loggedin) {
+        // res.send('Welcome back, ' + req.session.username + '!');
+         var username_dash = req.session.username;
+         con.query('SELECT * from chamber', function (err, rsj) {
+    
+         con.query('SELECT * from zone', function (err, rss) {
+    
+          con.query('SELECT * from farm', function (err, rs) {
+
+            con.query('SELECT role from user_login', function (error, rsi) {
+              var usertype = rsi[0].role;
+        
+            res.render('pages/registerfarm', {username_dash:username_dash,stream: rs,stream2: rss ,stream3: rsj,usertype:usertype });
+        });  });           });      });
+      } else {
+        res.send('Please login to view this page!');
+            }
+  });
+
+
+  app.get('/galleryupload',function (req, res, next){
+    if (req.session.loggedin) {
+        // res.send('Welcome back, ' + req.session.username + '!');
+         var username_dash = req.session.username;
+
+            con.query('SELECT role from user_login', function (error, rsi) {
+              var usertype = rsi[0].role;
+        
+            res.render('pages/galleryupload', {username_dash:username_dash,usertype:usertype });
+      });
+      } else {
+        res.send('Please login to view this page!');
+            }
+  });
+
+
   app.get('/maintain',function (req, res, next){
     if (req.session.loggedin) {
          var username_dash = req.session.username;
@@ -274,6 +339,12 @@ app.get('/newcomponent',function (req, res) {
         res.send('Please login to view this page!');
     }
   });
+
+
+
+//apna code
+
+//
 
   app.get('/delete', function(req, res) {
        if (req.session.loggedin) {
@@ -316,9 +387,9 @@ app.get('/deletezone', function(req, res) {
 /////////////////////////////////////////////////////////////////////////////////////////////
 var credentials = { 
   host: "localhost",
-  user: "tecozk_root",
-  password: "dbase_fc",
-  database: "tecozk_agritech2"
+  user: "root",
+  password: "",
+  database: "tecozk_agritech"
 }
 //////////////////////////////
 app.post('/loginauth',function (req, res) {
@@ -377,9 +448,23 @@ app.post('/loginauth',function (req, res) {
     connection.query(query2, function (error, rs) {
       connection.query('SELECT role from user_login where username = ?',[username], function (error, rsi) {
         var usertype = rsi[0].role;
-       
-        res.render('pages/dashboarduser',{username_dash:username_dash,stream: rs,rdate :rdate,usertype:usertype });
+        connection.query('Select * from farm', function(error,tf){
+          var tfarm=tf.length;
+          con.query('Select * from chamber', function(error,tc){
+            var tchamber=tc.length;
+          con.query('Select * from zone', function(error,tz){
+            var tzone=tz.length;
+          con.query('Select * from component', function(error,tcm){
+            var tcomponent=tcm.length;
+          con.query('Select * from user_login', function(error,tlog){
+            var tlogin=tlog.length;
+        res.render('pages/dashboarduser',{username_dash:username_dash,stream: rs,rdate :rdate,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin });
         
+      });
+      });
+      });
+      });
+      });
       });
       
        
@@ -438,6 +523,10 @@ app.post('/createfarm' , function(req,res,next){
   });  });});
 });
 
+
+
+
+
 app.post('/createchamber' , function(req,res,next){
   let chamber_name      = req.body.chamber_name;
   let chamber_disp_name = req.body.chamber_disp_name;
@@ -482,9 +571,22 @@ app.post('/createcomponent' , function(req,res,next){
     if (err) throw err;
     con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
       var usertype = rsi[0].role;
+con.query('Select * from farm',function(error,tf){
+  var tfarm=tf.length;
+  con.query('Select * from chamber', function(error,tc){
+    var tchamber=tc.length;
+  con.query('Select * from zone', function(error,tz){
+    var tzone=tz.length;
+  con.query('Select * from component', function(error,tcm){
+    var tcomponent=tcm.length;
+  con.query('Select * from user_login', function(error,tlog){
+    var tlogin=tlog.length;
+    
 
-    res.render('pages/dashboarduser',{username_dash:username_dash,usertype:usertype});
-});   });
+    res.render('pages/dashboarduser',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin});
+});   });});
+});
+});   });});
 });
 
 

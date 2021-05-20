@@ -31,11 +31,9 @@
   </head>
   <body>
     <!-- Side Navbar -->
-    <%- include('../templates/leftnavbar.ejs') %>
     <div class="page">
       <!-- navbar-->
       <header class="header">
-        <%- include('../templates/topbar.ejs') %>
       </header>
       <!-- Counts Section -->
       <!-- Header Section-->
@@ -60,18 +58,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% stream.forEach(function(item) { %>
-                            <tr>
-                                <td> <%= item.farm_id%> </td> 
-                                <td> <%= item.farm_name%></td>
-                                <td> <%= item.farm_size_len%></td>
-                                <td> <%= item.farm_size_wid%></td>
-                                <td> <%= item.farm_location%></td>
-                                <td> <%= item.farm_status%></td>
-                                <td> <%= item.farm_create_date%></td>
-                                <td style="text-align: right;"><a href="delete?deleteId=<%= item.farm_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
-                            </tr>
-                            <% }); %>
                            
 
                         </tbody>
@@ -92,25 +78,17 @@
                         <!-- <thead>  <h1>Your Chambers</h1> -->
                             <strong class="text-primary" style="font-size: 25px;"> YOUR CHAMBER</strong></div>
                             <tr>
-                                <th>Chamber ID</th>
-                                <th>Chamber Name</th>
-                                <th>Chamber Display Name</th>
-                                <th>Chamber Type</th>
-                                <th>Farm Name</th>
+                                <th>User ID</th>
+                                <th>User Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th>Role</th>
+                                <th>Last Login</th>
                                 
                             </tr>
                         </thead>
                         <tbody>
-                            <% stream3.forEach(function(item) { %>
-                            <tr>
-                                <td> <%= item.chamber_id%></td>
-                                <td> <%= item.chamber_name%></td>
-                                <td> <%= item.chamber_disp_name%></td>
-                                <td> <%= item.chamber_type%></td>
-                                <td> <%= item.farm_name%></td>
-                                <td style="text-align: right;"><a href="deletechamber?deleteId=<%= item.chamber_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
-                            </tr>
-                            <% }); %>
                            
 
                         </tbody>
@@ -141,16 +119,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% stream2.forEach(function(item) { %>
-                            <tr>
-                                <td> <%= item.zone_id%></td>
-                                <td> <%= item.zone_name%></td>
-                                <td> <%= item.chamber_name%></td>
-                                <td> <%= item.farm_name%></td>
-                                <td style="text-align: right;"><a href="deletezone?deleteId=<%= item.zone_id%>"> <i class="fa fa-trash fa-2x" aria-hidden="true"></i> </a> </td>
-                            </tr>
-                            <% }); %>
-                           
 
                         </tbody>
                     </table>
@@ -165,7 +133,6 @@
 
      
       
-      <%- include('../templates/copyright.ejs') %>
     </div>
    
     <!-- JavaScript files-->
@@ -180,4 +147,4 @@
     <!-- Main File-->
     <script src="js/front.js"></script>
   </body>
-</html>
+</html> 
