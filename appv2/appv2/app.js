@@ -11,9 +11,9 @@ const port = 7000;
 var mysql = require('mysql');
 var con = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "",
-  database: "tecozk_agritech"
+  user: "tecozk_root",
+  password: "dbase_fc",
+  database: "tecozk_agritech2"
 });
 con.connect(function(err) {
   if (err) throw err;
@@ -115,7 +115,7 @@ app.get('/dashboarduser',function (req, res) {
 app.get('/allchambers',function (req, res, next){
   if (req.session.loggedin) {
        var username_dash = req.session.username;
-      con.query('SELECT * from stream_chamber ORDER BY stream_id DESC LIMIT 10', function (err, rs) {
+      con.query('SELECT * from component_stream ORDER BY component_stream_id DESC LIMIT 10', function (err, rs) {
         con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
           var usertype = rsi[0].role;
           res.render('pages/allchambers', {username_dash:username_dash,stream: rs,usertype:usertype });
@@ -387,9 +387,9 @@ app.get('/deletezone', function(req, res) {
 /////////////////////////////////////////////////////////////////////////////////////////////
 var credentials = { 
   host: "localhost",
-  user: "root",
-  password: "",
-  database: "tecozk_agritech"
+  user: "tecozk_root",
+  password: "dbase_fc",
+  database: "tecozk_agritech2"
 }
 //////////////////////////////
 app.post('/loginauth',function (req, res) {
