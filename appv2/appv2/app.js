@@ -1,4 +1,5 @@
 const express = require('express');
+var multer = require('multer');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -13,12 +14,14 @@ var con = mysql.createConnection({
   host: "localhost",
   user: "tecozk_root",
   password: "dbase_fc",
-  database: "tecozk_agritech2"
-});
+  database: "tecozk_agritech2"});
 con.connect(function(err) {
   if (err) throw err;
 console.log("Connected!");
 });  
+
+
+
 
 
 
@@ -38,6 +41,104 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
+
+
+
+
+
+
+
+
+
+
+//Upload File///////
+var Storage=multer.diskStorage({
+  destination:"./public/uploads/",
+  filename:(req,file,cb)=>{
+    cb(null,file.fieldname+"_"+Date.now()+path.extname(file.originalname));
+  }
+}); 
+
+var upload = multer({
+  storage:Storage
+}).single('file');
+
+app.post('/upload', upload, function(req, res, next) {
+  
+  var success='uploads/'+req.file.filename;
+  console.log(success);
+  pathi = success;
+  if (req.session.loggedin) {
+    var username_dash = req.session.username;
+    var formdata = {
+      username : username_dash,
+      path:pathi
+
+    }
+    con.query('Insert into album_gallery set ?',formdata, function(error,tfa){
+    con.query('Select * from farm', function(error,tf){
+      var tfarm=tf.length;
+    con.query('Select * from chamber', function(error,tc){
+      var tchamber=tc.length;
+    con.query('Select * from zone', function(error,tz){
+      var tzone=tz.length;
+    con.query('Select * from component', function(error,tcm){
+      var tcomponent=tcm.length;
+    con.query('Select * from user_login', function(error,tlog){
+      var tlogin=tlog.length;
+    con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+      var usertype = rsi[0].role;
+      if(usertype == 'super_admin')
+    res.render('pages/dashboardsuper',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin ,tfa:tfa});
+   else if(usertype == 'admin')
+    res.render('pages/dashboardadmin',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin ,tfa:tfa});
+    else if(usertype == 'customer')
+    res.render('pages/dashboarduser',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin,tfa:tfa });
+  
+  });
+    });
+    });
+    });
+    });
+  });
+    });
+  } else {
+    res.send('Please login to view this page!');
+  }
+});
+
+
+
+
+
+
+
+
+
+////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ///////////////////////////////////
 
 app.get('/',function (req, res) {
@@ -53,8 +154,11 @@ app.get('/newfarm',function (req, res) {
   var username_dash = req.session.username;
   con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
     var usertype = rsi[0].role;
-  res.render('pages/newfarm',{username_dash:username_dash,usertype:usertype });
-  });
+    if (usertype == 'super_admin')
+    res.render('pages/newfarm',{username_dash:username_dash,usertype:usertype });
+    else if (usertype == 'admin')
+    res.render('pages/newfarmadmin',{username_dash:username_dash,usertype:usertype });
+      });
   } else {
   res.send('Please login to view this page!');
   }
@@ -83,6 +187,8 @@ app.get('/logout',function (req, res) {
 app.get('/dashboarduser',function (req, res) {
   if (req.session.loggedin) {
   var username_dash = req.session.username;
+  con.query('Select path from album_gallery', function(error,tfa){
+
   con.query('Select * from farm', function(error,tf){
     var tfarm=tf.length;
   con.query('Select * from chamber', function(error,tc){
@@ -95,8 +201,14 @@ app.get('/dashboarduser',function (req, res) {
     var tlogin=tlog.length;
   con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
     var usertype = rsi[0].role;
-  res.render('pages/dashboarduser',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin });
-  });
+    if(usertype == 'super_admin')
+  res.render('pages/dashboardsuper',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin ,tfa:tfa });
+ else if(usertype == 'admin')
+  res.render('pages/dashboardadmin',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin,tfa:tfa });
+  else if(usertype == 'customer')
+  res.render('pages/dashboarduser',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin,tfa:tfa });
+
+});});
   });
   });
   });
@@ -118,7 +230,12 @@ app.get('/allchambers',function (req, res, next){
       con.query('SELECT * from component_stream ORDER BY component_stream_id DESC LIMIT 10', function (err, rs) {
         con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
           var usertype = rsi[0].role;
+          if(usertype == 'super_admin')
           res.render('pages/allchambers', {username_dash:username_dash,stream: rs,usertype:usertype });
+          else if(usertype == 'admin')
+          res.render('pages/allchambersadmin', {username_dash:username_dash,stream: rs,usertype:usertype });
+         else if(usertype == 'customer')
+          res.render('pages/allchambersuser', {username_dash:username_dash,stream: rs,usertype:usertype });
       });});
   } else {
       res.render('errors/notloggedinerror');
@@ -129,7 +246,7 @@ app.get('/currentchambers',function (req, res, next){
   if (req.session.loggedin) {
       // res.send('Welcome back, ' + req.session.username + '!');
        var username_dash = req.session.username;
-      con.query('SELECT * from stream_chamber ORDER BY stream_id DESC LIMIT 10', function (err, rs) {
+      con.query('SELECT * from component_stream ORDER BY component_stream_id DESC LIMIT 10', function (err, rs) {
           res.render('pages/currentchambers', {username_dash:username_dash,stream: rs });
       //  res.render('pages/users');
       });
@@ -160,8 +277,12 @@ app.get('/activitylog',function (req, res, next){
        
         con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
           var usertype = rsi[0].role;
-    
+    if(usertype == 'super_admin')
         res.render('pages/activitylog', {username_dash:username_dash,usertype: usertype,stream: rs });
+        else if(usertype == 'admin')
+        res.render('pages/activitylogadmin', {username_dash:username_dash,usertype: usertype,stream: rs });
+        else if(usertype == 'customer')
+        res.render('pages/activityloguser', {username_dash:username_dash,usertype: usertype,stream: rs });
     });  });
   } else {
       res.send('Please login to view this page!');
@@ -176,9 +297,14 @@ app.get('/tickets',function (req, res, next){
        
         con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
           var usertype = rsi[0].role;
-    
+    if(usertype == 'super_admin')
         res.render('pages/tickets', {username_dash:username_dash,usertype: usertype,stream: rs });
-    });  });
+       else if(usertype == 'admin')
+        res.render('pages/ticketsadmin', {username_dash:username_dash,usertype: usertype,stream: rs });
+        else if(usertype == 'customer')
+        res.render('pages/ticketsuser', {username_dash:username_dash,usertype: usertype,stream: rs });
+
+      });  });
   } else {
       res.send('Please login to view this page!');
   }
@@ -212,9 +338,9 @@ app.get('/tickets',function (req, res, next){
   // res.end();
 // });
 
-// app.get('/forms',function (req, res) {
-//   res.render('pages/forms')
-// });
+app.get('/forms',function (req, res) {
+  res.render('pages/forms')
+});
 
 app.get('/newzone',function (req, res,next) {
   if (req.session.loggedin) {
@@ -223,8 +349,10 @@ app.get('/newzone',function (req, res,next) {
      con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
         con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
           var usertype = rsi[0].role;
-    
+          if (usertype == 'super_admin')    
         res.render('pages/newzone', {username_dash:username_dash,stream: rs,stream2: rss,usertype: usertype });
+        if (usertype == 'admin')    
+        res.render('pages/newzoneadmin', {username_dash:username_dash,stream: rs,stream2: rss,usertype: usertype });
     });  });});
   } else {
   res.send('Please login to view this page!');
@@ -234,13 +362,16 @@ app.get('/newzone',function (req, res,next) {
 app.get('/newchamber',function (req, res,next) {
   if (req.session.loggedin) {
   var username_dash = req.session.username;
-  con.query('SELECT zone_name from zone where user_name = ?',username_dash, function (err, rsi) {
+  con.query('SELECT zone_name from zone where user_name = ?',username_dash, function (err, rss) {
     
     con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
       con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
         var usertype = rsi[0].role;
-  
-      res.render('pages/newchamber', {username_dash:username_dash,stream: rs,stream2: rsi,usertype:usertype });
+        if (usertype == 'super_admin')
+      res.render('pages/newchamber', {username_dash:username_dash,stream: rs,stream2: rss,usertype:usertype });
+      if (usertype == 'admin')
+      res.render('pages/newchamberadmin', {username_dash:username_dash,stream: rs,stream2: rss,usertype:usertype });
+
   });     });});
   } else {
     res.send('Please login to view this page!');
@@ -256,8 +387,10 @@ app.get('/newcomponent',function (req, res) {
     con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
       con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
         var usertype = rsi[0].role;
-  
+        if (usertype == "super_admin") 
       res.render('pages/newcomponent', {username_dash:username_dash,stream: rs,stream2: rss,usertype:usertype });
+      if (usertype == "admin") 
+      res.render('pages/newcomponentadmin', {username_dash:username_dash,stream: rs,stream2: rss,usertype:usertype });
     });      
    });  }); 
 } else {
@@ -277,8 +410,11 @@ app.get('/newcomponent',function (req, res) {
 
             con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
               var usertype = rsi[0].role;
-        
+              if (usertype == 'super_admin')        
             res.render('pages/insights', {username_dash:username_dash,stream: rs,stream2: rss ,stream3: rsj,usertype:usertype });
+            if (usertype == 'admin')        
+            res.render('pages/insightsadmin', {username_dash:username_dash,stream: rs,stream2: rss ,stream3: rsj,usertype:usertype });
+
         });  });           });      });
       } else {
         res.send('Please login to view this page!');
@@ -296,11 +432,15 @@ app.get('/newcomponent',function (req, res) {
     
           con.query('SELECT * from farm', function (err, rs) {
 
-            con.query('SELECT role from user_login', function (error, rsi) {
+            con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
               var usertype = rsi[0].role;
-        
+        if (usertype == 'super_admin')
             res.render('pages/registerfarm', {username_dash:username_dash,stream: rs,stream2: rss ,stream3: rsj,usertype:usertype });
-        });  });           });      });
+           else if (usertype == 'admin')
+            res.render('pages/registerfarmadmin', {username_dash:username_dash,stream: rs,stream2: rss ,stream3: rsj,usertype:usertype });
+           else if (usertype == 'customer')
+            res.render('pages/registerfarmuser', {username_dash:username_dash,stream: rs,stream2: rss ,stream3: rsj,usertype:usertype });
+          });  });           });      });
       } else {
         res.send('Please login to view this page!');
             }
@@ -312,10 +452,14 @@ app.get('/newcomponent',function (req, res) {
         // res.send('Welcome back, ' + req.session.username + '!');
          var username_dash = req.session.username;
 
-            con.query('SELECT role from user_login', function (error, rsi) {
+            con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
               var usertype = rsi[0].role;
-        
+              if (usertype == 'super_admin')
             res.render('pages/galleryupload', {username_dash:username_dash,usertype:usertype });
+            if (usertype == 'admin')
+            res.render('pages/galleryuploadadmin', {username_dash:username_dash,usertype:usertype });
+            if (usertype == 'customer')
+            res.render('pages/galleryuploaduser', {username_dash:username_dash,usertype:usertype });
       });
       } else {
         res.send('Please login to view this page!');
@@ -358,6 +502,27 @@ app.get('/newcomponent',function (req, res) {
       res.send('Please login to view this page!');
     }
 });
+
+
+app.get('/updateuserroles', function(req, res) {
+  if (req.session.loggedin) {
+ var username_dash = req.session.username;
+  let role =  req.query.role;
+  let id =  req.query.id;
+
+var form_data = [role,id];
+
+ con.query('Update user_login set role = ? where id = ?',form_data, function (err, rs) {
+   if (err) 
+   throw err;
+     res.redirect('/usrmgr');
+ });
+} else {
+ res.send('Please login to view this page!');
+}
+});
+
+
   
 app.get('/deletechamber', function(req, res) {
   if (req.session.loggedin) {
@@ -384,13 +549,36 @@ app.get('/deletezone', function(req, res) {
  res.send('Please login to view this page!');
 }
 });
+
+
+app.get('/usrmgr',function (req, res, next){
+  if (req.session.loggedin) {
+      // res.send('Welcome back, ' + req.session.username + '!');
+       var username_dash = req.session.username;
+       con.query('SELECT * from chamber where user_name = ?',username_dash, function (err, rsj) {
+  
+       con.query('SELECT role_item from role_items ',username_dash, function (err, rss) {
+  
+        con.query('SELECT * from user_login',username_dash, function (err, rs) {
+
+          con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
+            var usertype = rsi[0].role;
+            if (usertype = 'super_admin')
+          res.render('pages/usermanager', {username_dash:username_dash,stream: rs,stream2: rss,usertype:usertype });
+          else
+          res.send('You are not authorized to perform this action')
+      });  });           });      });
+    } else {
+      res.send('Please login to view this page!');
+          }
+});
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 var credentials = { 
   host: "localhost",
   user: "tecozk_root",
   password: "dbase_fc",
-  database: "tecozk_agritech2"
-}
+  database: "tecozk_agritech2"}
 //////////////////////////////
 app.post('/loginauth',function (req, res) {
 
@@ -458,9 +646,15 @@ app.post('/loginauth',function (req, res) {
             var tcomponent=tcm.length;
           con.query('Select * from user_login', function(error,tlog){
             var tlogin=tlog.length;
-        res.render('pages/dashboarduser',{username_dash:username_dash,stream: rs,rdate :rdate,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin });
+            con.query('Select path from album_gallery', function(error,tfa){
+            if (usertype == 'super_admin')
+        res.render('pages/dashboardsuper',{username_dash:username_dash,stream: rs,rdate :rdate,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin });
+        else if (usertype == 'admin')
+        res.render('pages/dashboardadmin',{username_dash:username_dash,stream: rs,rdate :rdate,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin });
+        else if (usertype == 'customer')
+        res.render('pages/dashboarduser',{username_dash:username_dash,stream: rs,rdate :rdate,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin,tfa:tfa });
         
-      });
+      }); });
       });
       });
       });
@@ -519,8 +713,12 @@ app.post('/createfarm' , function(req,res,next){
     con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
       con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
         var usertype = rsi[0].role;
+        if (usertype == 'super_admin')
   res.render('pages/newchamber', {username_dash:username_dash,stream: rs,usertype:usertype });
-  });  });});
+  else if (usertype == 'admin')
+  res.render('pages/newchamberadmin', {username_dash:username_dash,stream: rs,usertype:usertype });
+
+});  });});
 });
 
 
@@ -549,8 +747,12 @@ app.post('/createchamber' , function(req,res,next){
         con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
           con.query('SELECT role from user_login where username = ?',username_dash, function (error, rss) {
             var usertype = rss[0].role;
+            if (usertype == 'super_admin')
           res.render('pages/newzone', {username_dash:username_dash,stream: rs,stream2: rsi,usertype:usertype });
-      });  });  });
+         else if (usertype == 'admin')
+          res.render('pages/newzoneadmin', {username_dash:username_dash,stream: rs,stream2: rsi,usertype:usertype });
+
+        });  });  });
  
 });});
 
@@ -559,13 +761,15 @@ app.post('/createcomponent' , function(req,res,next){
   let component_disp_name = req.body.component_disp_name;
   let component_master_type = req.body.component_master_type;
   let component_type = req.body.component_type;
+  let zone_name=req.body.zone_name;
   var username_dash = req.session.username;
   
   var form_data = {
       component_name: component_name,
       component_disp_name:component_disp_name,
       component_master_type:component_master_type,
-      component_type:component_type
+      component_type:component_type,
+      zone_name:zone_name
     }
   con.query('INSERT INTO component SET ?', form_data, function (err, result) {
     if (err) throw err;
@@ -582,7 +786,13 @@ con.query('Select * from farm',function(error,tf){
   con.query('Select * from user_login', function(error,tlog){
     var tlogin=tlog.length;
     
+    if (usertype == 'super_admin')
+    res.render('pages/dashboardsuper',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin});
 
+    else if (usertype == 'admin')
+    res.render('pages/dashboardadmin',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin});
+
+    else if (usertype == 'customer')
     res.render('pages/dashboarduser',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin});
 });   });});
 });
@@ -609,9 +819,12 @@ app.post('/tocomponent' , function(req,res,next){
       con.query('SELECT farm_name from farm where user_name = ?',username_dash, function (err, rs) {
         con.query('SELECT role from user_login where username = ?',username_dash, function (error, rss) {
           var usertype = rss[0].role;
-    
+          if (usertype == 'super_admin')
         res.render('pages/newcomponent', {username_dash:username_dash,stream: rs,stream2: rsi,usertype:usertype });
-    });  });  });
+        else if (usertype == 'admin')
+        res.render('pages/newcomponentadmin', {username_dash:username_dash,stream: rs,stream2: rsi,usertype:usertype });
+
+      });  });  });
 });
 });
 

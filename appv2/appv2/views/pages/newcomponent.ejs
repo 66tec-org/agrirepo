@@ -38,7 +38,7 @@
   </head>
   <body>
     <!-- Side Navbar -->
-    <%- include('../templates/leftnavbar.ejs') %>
+    <%- include('../templates/leftnavbarsuper.ejs') %>
     <div class="page">
       <!-- navbar-->
       <header class="header">
@@ -76,7 +76,7 @@
                 </select>
 
                 <label for="">Zone Name</label>
-                <select class="form-control" name="chamber_name" id="">
+                <select class="form-control" name="zone_name" id="">
                   <% stream2.forEach(function(item) { %>
                   <option><%= item.zone_name%></option>
                   <% }); %>
