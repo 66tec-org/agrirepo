@@ -65,14 +65,18 @@ var upload = multer({
 
 app.post('/upload', upload, function(req, res, next) {
   
-  var success11='uploads/'+req.file.filename;
-  console.log(success11);
+  var success='uploads/'+req.file.filename;
+  console.log(success);
+  pathi = success;
   if (req.session.loggedin) {
     var username_dash = req.session.username;
     var formdata = {
       username : username_dash,
-      path:success11}
+      path:pathi
 
+    }
+
+    con.query('select * from album_gallery',function(error,tfa){
     con.query('Insert into album_gallery set ?',formdata, function(error,tttt){
     con.query('Select * from farm', function(error,tf){
       var tfarm=tf.length;
@@ -86,7 +90,6 @@ app.post('/upload', upload, function(req, res, next) {
       var tlogin=tlog.length;
     con.query('SELECT role from user_login where username = ?',username_dash, function (error, rsi) {
       var usertype = rsi[0].role;
-      con.query('select * from album_gallery',function(error,tfa){
       if(usertype == 'super_admin')
     res.render('pages/dashboardsuper',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin,tfa:tfa});
    else if(usertype == 'admin')
@@ -785,21 +788,19 @@ con.query('Select * from farm',function(error,tf){
     var tcomponent=tcm.length;
   con.query('Select * from user_login', function(error,tlog){
     var tlogin=tlog.length;
-    con.query('Select * from album_gallery', function(error,tfa){
-
+    
     if (usertype == 'super_admin')
-    res.render('pages/dashboardsuper',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin,tfa:tfa});
+    res.render('pages/dashboardsuper',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin});
 
     else if (usertype == 'admin')
-    res.render('pages/dashboardadmin',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin,tfa:tfa});
+    res.render('pages/dashboardadmin',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin});
 
     else if (usertype == 'customer')
-    res.render('pages/dashboarduser',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin,tfa:tfa});
+    res.render('pages/dashboarduser',{username_dash:username_dash,usertype:usertype,tfarm:tfarm,tchamber:tchamber,tzone:tzone,tcomponent:tcomponent,tlogin:tlogin});
 });   });});
 });
 });   });});
 });
-}); 
 
 
 app.post('/tocomponent' , function(req,res,next){

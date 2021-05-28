@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dashboard</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css">
+    <!-- Google fonts - Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <!-- jQuery Circle-->
+    <link rel="stylesheet" href="css/grasp_mobile_progress_circle-1.0.0.min.css">
+    <!-- Custom Scrollbar-->
+    <link rel="stylesheet" href="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+     <!-- <link href="assets/plugins/bootstrap/bootstrap.css" rel="stylesheet" /> -->
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="assets/plugins/pace/pace-theme-big-counter.css" rel="stylesheet" />
+   <link href="assets/css/style.css" rel="stylesheet" />
+      <link href="assets/css/main-style.css" rel="stylesheet" />
+
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+  </head>
+  <body>
+    <!-- Side Navbar -->
+    <%- include('../templates/leftnavbarsuper.ejs') %>
+    <div class="page">
+      <!-- navbar-->
+      <header class="header">
+        <%- include('../templates/topbar.ejs') %>
+      </header>
+      <!-- Counts Section -->
+      <div class="panel-body container">
+
+        <div class="row ">
+          <!-- Welcome -->
+  
+          <div class="col-lg-12">
+              <div class="alert alert-info">
+                  <i class="fa fa-folder-open"></i><b>&nbsp;Hello ! </b>Welcome Back <b><%= username_dash  %> </b>
+              </div>
+          </div>
+          <!--end  Welcome -->
+        </div>
+        </div>
+
+    
+      <!-- Header Section-->
+      <center>
+        <div class="panel-body container">
+
+        <div class="row">
+          <div class="col-lg-2">
+
+          </div>
+          <div class="col-lg-6">
+              <h2> New Farm</h2>
+              <form role="form" method="POST" action="createfarm" >
+              <div class="form-group">
+                  
+                <label for="">Farm Name</label>
+                <input type="text" required
+                  class="form-control" name="farm_name" id="farm_name" aria-describedby="helpId" placeholder="">
+                <small id="helpId" class="form-text text-muted">insert your farm name here</small>
+
+                <label for="">Farm Length</label>
+                <input type="text" required
+                  class="form-control" name="farm_size_len" id="farm_size_len" aria-describedby="helpId" placeholder="">
+                <small id="helpId" class="form-text text-muted">make sure to enter the length in inches</small>
+
+                <label for="">Farm Width</label>
+                <input type="text" required
+                  class="form-control" name="farm_size_wid" id="farm_size_wid" aria-describedby="helpId" placeholder="">
+                <small id="helpId" class="form-text text-muted">Help text</small>
+
+                <label for="">Farm Location</label>
+                <input type="text" required
+                  class="form-control" name="farm_location" id="farm_location" aria-describedby="helpId" placeholder="">
+                <small id="helpId" class="form-text text-muted">Help text</small>
+                <br>
+                <button href="createfarm" class="btn btn-primary" role="button">Create</button>                
+              </div>
+            </form>
+            
+
+          </div> 
+
+      </div>
+      </div>
+    </center>
+
+
+
+
+      <!-- Statistics Section-->
+      
+      <%- include('../templates/copyright.ejs') %>
+    </div>
+   
+    <!-- JavaScript files-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+    <script src="vendor/jquery.cookie/jquery.cookie.js"> </script>
+    
+    <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+    <script src="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+  
+    <!-- Main File-->
+    <script src="js/front.js"></script>
+  </body>
+</html>

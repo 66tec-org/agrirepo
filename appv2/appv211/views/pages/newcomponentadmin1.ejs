@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dashboard</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css">
+    <!-- Google fonts - Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <!-- jQuery Circle-->
+    <link rel="stylesheet" href="css/grasp_mobile_progress_circle-1.0.0.min.css">
+    <!-- Custom Scrollbar-->
+    <link rel="stylesheet" href="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+     <!-- <link href="assets/plugins/bootstrap/bootstrap.css" rel="stylesheet" /> -->
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="assets/plugins/pace/pace-theme-big-counter.css" rel="stylesheet" />
+   <link href="assets/css/style.css" rel="stylesheet" />
+      <link href="assets/css/main-style.css" rel="stylesheet" />
+
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+  </head>
+  <body>
+    <!-- Side Navbar -->
+    <%- include('../templates/leftnavbaradmin.ejs') %>
+    <div class="page">
+      <!-- navbar-->
+      <header class="header">
+        <%- include('../templates/topbar.ejs') %>
+      </header>
+      <!-- Counts Section -->
+      
+      <!-- Header Section-->
+      <div class="row">
+        <!-- Welcome -->
+        <div class="col-lg-12">
+            <div class="alert alert-info">
+                <i class="fa fa-folder-open"></i><b>&nbsp;Hello ! </b>Welcome Back <b><%= username_dash  %> </b>
+            </div>
+        </div>
+ 
+       <!--end  Welcome -->
+      </div>
+      <center>
+      <div class="row">
+          <div class="col-lg-2">
+
+          </div>
+          <div class="col-lg-6">
+              <h2> New Component</h2>
+              <form role="form" method="POST" action="createcomponent" >
+              <div class="form-group">
+
+                <label for="">Farm Name</label>
+                <select class="form-control" name="farm_name" id="">
+                  <% stream.forEach(function(item) { %>
+                  <option><%= item.farm_name%></option>
+                  <% }); %>
+
+                </select>
+
+                <label for="">Zone Name</label>
+                <select class="form-control" name="zone_name" id="">
+                  <% stream2.forEach(function(item) { %>
+                  <option><%= item.zone_name%></option>
+                  <% }); %>
+
+                </select>
+                  
+                <label for="">Component Name</label>
+                <input type="text"
+                  class="form-control" required name="component_name" id="Component_name" aria-describedby="helpId" placeholder="">
+                <small id="helpId" class="form-text text-muted">insert your component name here</small>
+
+                <label for="">Component Display Name</label>
+                <input type="text"
+                  class="form-control" required name="component_disp_name" id="component_disp_name" aria-describedby="helpId" placeholder="">
+                <small id="helpId" class="form-text text-muted"></small>
+
+                <label for="">Component Master Type</label>
+                <!-- <input type="text" class="form-control" name="component_master_type" id="component_master_type" aria-describedby="helpId" placeholder=""> -->
+                  <select class="form-control" name="component_master_type" id="component_master_type" aria-describedby="helpId" placeholder="">
+                    <option  value="Actuator">Actuator</option>
+                    <option value="Sensor">Sensor</option>
+                  </select>
+                <small id="helpId" class="form-text text-muted">Help text</small>
+
+                <label for="">Component Type</label>
+                <!-- <input type="text" class="form-control" name="component_type" id="component_type" aria-describedby="helpId" placeholder=""> -->
+                <select class="form-control" name="component_type" id="component_type" aria-describedby="helpId" placeholder="">
+                    
+                    <option value="Soil Moisture">Soil Moisture</option>
+                      <option value="Pump">Pump</option>
+                      <option value="Fan">Fan</option>
+                      <option value="Leds">Leds</option>
+                      <option value="Light Intensity">Light Intensity</option>
+                      <option value="Humidity">Humidity</option>
+                      <option value="Temperature">Temperature</option>
+
+                </select>
+                  <small id="helpId" class="form-text text-muted">Help text</small>
+                <br>
+                <button href="createcomponent" class="btn btn-primary" role="button">Create</button>                
+              </div>
+            </form>
+            
+          </div> 
+
+      </div>
+    </center>
+
+
+
+
+      <!-- Statistics Section-->
+      
+      <%- include('../templates/copyright.ejs') %>
+    </div>
+   
+    <!-- JavaScript files-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+    <script src="vendor/jquery.cookie/jquery.cookie.js"> </script>
+    
+    <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+    <script src="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+  
+    <!-- Main File-->
+    <script src="js/front.js"></script>
+  </body>
+</html>
